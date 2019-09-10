@@ -8,7 +8,7 @@ module JSONAPI
       module ClassMethods
         def records(options = {})
           user_context = JSONAPI::Authorization.configuration.user_context(options[:context])
-          ::Pundit.policy_scope!(user_context, _model_class)
+          ::Pundit.policy_scope!(user_context, _model_class, options: options)
         end
       end
 
@@ -21,7 +21,7 @@ module JSONAPI
           record_or_records
         when JSONAPI::Relationship::ToMany
           user_context = JSONAPI::Authorization.configuration.user_context(context)
-          ::Pundit.policy_scope!(user_context, record_or_records)
+          ::Pundit.policy_scope!(user_context, record_or_records, options: { parent: @model })
         else
           raise "Unknown relationship type #{relationship.inspect}"
         end

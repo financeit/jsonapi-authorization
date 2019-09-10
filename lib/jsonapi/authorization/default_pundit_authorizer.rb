@@ -52,7 +52,7 @@ module JSONAPI
       #   this will always be +nil+
       def show_relationship(source_record:, related_record:)
         ::Pundit.authorize(user, source_record, 'show?')
-        ::Pundit.authorize(user, related_record, 'show?') unless related_record.nil?
+        ::Pundit.authorize(user, related_record, 'show?', options: { parent: source_record }) unless related_record.nil?
       end
 
       # <tt>GET /resources/:id/another-resource</tt>
@@ -66,7 +66,7 @@ module JSONAPI
       #   associated record was not found
       def show_related_resource(source_record:, related_record:)
         ::Pundit.authorize(user, source_record, 'show?')
-        ::Pundit.authorize(user, related_record, 'show?') unless related_record.nil?
+        ::Pundit.authorize(user, related_record, 'show?', options: { parent: source_record }) unless related_record.nil?
       end
 
       # <tt>GET /resources/:id/other-resources</tt>
@@ -79,7 +79,7 @@ module JSONAPI
       # * +related_record_class+ - The associated record class to show
       def show_related_resources(source_record:, related_record_class:)
         ::Pundit.authorize(user, source_record, 'show?')
-        ::Pundit.authorize(user, related_record_class, 'index?')
+        ::Pundit.authorize(user, related_record_class, 'index?', options: { parent: source_record })
       end
 
       # <tt>PATCH /resources/:id</tt>
@@ -241,7 +241,7 @@ module JSONAPI
       #                    resource.
       # rubocop:disable Lint/UnusedMethodArgument
       def include_has_many_resource(source_record:, record_class:)
-        ::Pundit.authorize(user, record_class, 'index?')
+        ::Pundit.authorize(user, record_class, 'index?', options: { parent: source_record })
       end
       # rubocop:enable Lint/UnusedMethodArgument
 
@@ -258,7 +258,7 @@ module JSONAPI
       # * +related_record+ - The associated record to return
       # rubocop:disable Lint/UnusedMethodArgument
       def include_has_one_resource(source_record:, related_record:)
-        ::Pundit.authorize(user, related_record, 'show?')
+        ::Pundit.authorize(user, related_record, 'show?', options: { parent: source_record })
       end
       # rubocop:enable Lint/UnusedMethodArgument
 
