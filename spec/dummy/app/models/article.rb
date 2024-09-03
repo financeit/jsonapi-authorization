@@ -1,4 +1,4 @@
-class Article < ActiveRecord::Base
+class Article < ApplicationRecord
   has_many :comments
   has_many :tags, as: :taggable
   belongs_to :author, class_name: 'User'
