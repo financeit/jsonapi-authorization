@@ -1,33 +1,37 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
-require "rails/all"
-Bundler.require(:default, Rails.env)
+require "rails"
+# Pick the frameworks you want:
+require "active_model/railtie"
+require "active_job/railtie"
+require "active_record/railtie"
+require "active_storage/engine"
+require "action_controller/railtie"
+require "action_mailer/railtie"
+require "action_mailbox/engine"
+require "action_text/engine"
+require "action_view/railtie"
+require "action_cable/engine"
+# require "sprockets/railtie"
+require "rails/test_unit/railtie"
 
-class Application < Rails::Application
-  config.root = File.expand_path("../..", __FILE__)
-  config.cache_classes = true
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
-  config.eager_load = false
-  config.serve_static_files = true
-  config.static_cache_control = "public, max-age=3600"
+module Version60
+  class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 6.0
 
-  config.consider_all_requests_local = true
-  config.action_controller.perform_caching = false
+    # Settings in config/environments/* take precedence over those specified here.
+    # Application configuration can go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded after loading
+    # the framework and any gems in your application.
 
-  config.action_dispatch.show_exceptions = false
-
-  config.action_controller.allow_forgery_protection = false
-
-  config.active_support.deprecation = :stderr
-
-  config.middleware.delete "Rack::Lock"
-  config.middleware.delete "ActionDispatch::Flash"
-  # config.middleware.delete "ActionDispatch::BestStandardsSupport"
-
-  config.secret_key_base = "correct-horse-battery-staple"
-end
-
-JSONAPI.configure do |config|
-  config.default_processor_klass = JSONAPI::Authorization::AuthorizingProcessor
-  config.exception_class_whitelist = [Pundit::NotAuthorizedError]
+    # Only loads a smaller set of middleware suitable for API only apps.
+    # Middleware like session, flash, cookies can be added back manually.
+    # Skip views, helpers and assets when generating a new resource.
+    config.api_only = true
+  end
 end
