@@ -11,6 +11,7 @@
 *.orig
 .ruby-version
 tags
+.mise.toml
 
 *.sqlite3
 *.log
