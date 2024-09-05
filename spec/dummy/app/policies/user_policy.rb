@@ -1,5 +1,11 @@
 class UserPolicy
-  class Scope < Struct.new(:user, :scope)
+  class Scope
+    def initialize(user, scope, options: {})
+      @user = user
+      @scope = scope
+      @options = options
+    end
+
     def resolve
       raise NotImplementedError
     end
